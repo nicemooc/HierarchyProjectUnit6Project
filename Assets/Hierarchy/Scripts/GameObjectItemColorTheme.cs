@@ -26,4 +26,10 @@ public class GameObjectItemColorTheme : ScriptableObject
 
     public
         Color _inactiveIconColor = Color.black * 0.5f;
+
+    public
+        Sprite _foldoutOn;
+
+    public
+        Sprite _foldoutOff;
 }
