@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class HierarchyContextMenu : MonoBehaviour
+public class HierarchyContextMenuPresenter
 {
-    [SerializeField] private HierarchyWindow _hierarchy;
     private readonly string _suffixForTempItemCopy = " #(Temp Copy Item)#";
-    [SerializeField] private IUnityContextMenu _contextMenu;
+    private IUnityContextMenu _contextMenu;
+    private HierarchyWindowPresenter _hierarchy;
+    private HierarchyContext _hierarchyContext;
 
 
     public HierarchyItem SelectedItem => _hierarchy.SelectedItem;
 
-    private void Awake()
+    public void Init(HierarchyContext context)
     {
-        _hierarchy = FindObjectOfType<HierarchyWindow>(true);
+        _hierarchy = context.HierarchyWindowPresenter;
     }
 
     public void OpenContextMenu(Vector2 point)

@@ -1,10 +1,9 @@
-using System.Linq;
 using UnityEngine;
 
 public class HierarchyNavigation : MonoBehaviour
 {
     // KeyboardShortcut _rteKeyboardShortcut;
-    private HierarchyWindow _hierarchyWindowierarchy;
+    private HierarchyWindowPresenter _hierarchyWindowierarchy;
 
     private HierarchyItem SelectedItem => _hierarchyWindowierarchy.SelectedItem;
 
@@ -20,11 +19,11 @@ public class HierarchyNavigation : MonoBehaviour
 
         if (SelectedItem == null) return;
 
-        var selectedItemIndex =
-            _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
+        //    var selectedItemIndex =
+        //         _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
 
-        nextItem = _hierarchyWindowierarchy.ListItemsSortByIndex.SkipWhile((item, index) => index <= selectedItemIndex)
-            .FirstOrDefault();
+        //    nextItem = _hierarchyWindowierarchy.ListItemsSortByIndex.SkipWhile((item, index) => index <= selectedItemIndex)
+        //        .FirstOrDefault();
 
         if (nextItem != null && nextItem.gameObject.activeInHierarchy)
             _hierarchyWindowierarchy.HandleSelectItem(nextItem);
@@ -36,11 +35,11 @@ public class HierarchyNavigation : MonoBehaviour
 
         if (SelectedItem == null) return;
 
-        var selectedItemIndex =
-            _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
+        //    var selectedItemIndex =
+        //        _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
 
-        prevItem = _hierarchyWindowierarchy.ListItemsSortByIndex.TakeWhile((item, index) => index < selectedItemIndex)
-            .LastOrDefault();
+        //     prevItem = _hierarchyWindowierarchy.ListItemsSortByIndex.TakeWhile((item, index) => index < selectedItemIndex)
+        //        .LastOrDefault();
 
         if (prevItem != null && prevItem.gameObject.activeInHierarchy)
             _hierarchyWindowierarchy.HandleSelectItem(prevItem);
@@ -50,14 +49,14 @@ public class HierarchyNavigation : MonoBehaviour
     {
         if (SelectedItem == null) return;
 
-        var selectedItemIndex =
-            _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
+        //   var selectedItemIndex =
+        //       _hierarchyWindowierarchy.ListItemsSortByIndex.FindIndex(item => item.Equals(SelectedItem));
 
-        var nextItem = _hierarchyWindowierarchy.ListItemsSortByIndex
-            .SkipWhile((item, index) => index <= selectedItemIndex)
-            .Where(item => item.View.FoldoutImage.gameObject.activeInHierarchy).FirstOrDefault();
+        //   var nextItem = _hierarchyWindowierarchy.ListItemsSortByIndex
+        //       .SkipWhile((item, index) => index <= selectedItemIndex)
+        //       .Where(item => item.View.FoldoutImage.gameObject.activeInHierarchy).FirstOrDefault();
 
-        if (nextItem != null) _hierarchyWindowierarchy.HandleSelectItem(nextItem);
+//if (nextItem != null) _hierarchyWindowierarchy.HandleSelectItem(nextItem);
     }
 
     public void MoveToPreviousParentItem()

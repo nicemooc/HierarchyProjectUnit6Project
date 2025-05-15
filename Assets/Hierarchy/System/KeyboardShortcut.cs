@@ -12,9 +12,7 @@ public class KeyboardShortcut : MonoBehaviour
     public static bool IsShiftPressed;
     public static bool IsAltPressed;
     public static bool IsActive = true;
-
-    private string _keyHold = "";
-    private string _keyPressed = "";
+    [SerializeField] private HierarchyKeyboardShortcutConfig _hierarchyKeyboardShortcutConfig;
     private readonly List<KeyCommand> _listKeyCommand = new();
 
     private readonly List<string> _listOfCombineKeyCode = new()
@@ -26,6 +24,15 @@ public class KeyboardShortcut : MonoBehaviour
         KeyCode.RightAlt.ToString(),
         KeyCode.RightShift.ToString()
     };
+
+    private string _keyHold = "";
+    private string _keyPressed = "";
+
+    public HierarchyKeyboardShortcutConfig HierarchyKeyboardShortcutConfig
+    {
+        get => _hierarchyKeyboardShortcutConfig;
+        set => _hierarchyKeyboardShortcutConfig = value;
+    }
 
     private void Update()
     {

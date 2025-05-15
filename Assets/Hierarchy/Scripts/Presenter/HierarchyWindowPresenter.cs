@@ -2,52 +2,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ExtraLinq;
-using NaughtyAttributes;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class HierarchyWindow : MonoBehaviour
+public class HierarchyWindowPresenter
 {
-    [SerializeField] private HierarchyWindowView _view;
-    [SerializeField] private HierarchyContextMenu _hierarchyContextMenu;
-
-    [SerializeField] [ReadOnly] private HierarchyItem _draggedItem;
-    [SerializeField] [ReadOnly] private HierarchyItem _hoveredItem;
-    [SerializeField] [ReadOnly] private HierarchyItem _selectedItem;
-    public List<HierarchyItem> ListItemsSortByIndex = new();
     private readonly TimeSpan _searchUpdateTimeInSec = TimeSpan.FromSeconds(0.35);
     private readonly float _timeToOpen = 1f;
+    private readonly List<HierarchyItem> ListItemsSortByIndex = new();
+    private HierarchyContext _hierarchyContext;
+    private HierarchyContextMenuPresenter _hierarchyContextMenu;
     private float _hoverTime;
-
     private IDisposable _searchDisposable;
 
+
     private Coroutine hoverCoroutine;
-    public List<HierarchyItem> Items => _view.Items;
-    public HierarchyWindowView View => _view;
-
-    public bool IsSearching => !View.SearchText.IsNullOrEmpty();
-
-    public HierarchyItem HoveredItem
-    {
-        get => _hoveredItem;
-        private set => _hoveredItem = value;
-    }
-
-    public HierarchyItem SelectedItem
-    {
-        get => _selectedItem;
-        private set => _selectedItem = value;
-    }
-
-    public HierarchyItem DraggedItem
-    {
-        get => _draggedItem;
-        private set => _draggedItem = value;
-    }
 
 
-    private void Awake()
+    private bool IsSearching => !View.SearchText.IsNullOrEmpty();
+    private List<HierarchyItem> Items => View.Items;
+    private HierarchyWindowView View { get; set; }
+
+
+    public HierarchyItem HoveredItem { get; private set; }
+
+    public HierarchyItem SelectedItem { get; private set; }
+
+    public HierarchyItem DraggedItem { get; private set; }
+
+
+    private void RegisterViewEvents()
     {
         View.OnItemFoldoutClick += (item, isCollapsed) => item.OnClickedFoldout(isCollapsed);
 
@@ -60,6 +45,14 @@ public class HierarchyWindow : MonoBehaviour
         View.OnItemExit += HandleItemExit;
         View.OnSearchInputChanged += OnSearchInputChanged;
         View.OnItemEndDrag += HandleItemEndDrag;
+    }
+
+    public void Init(HierarchyContext hierarchyContext)
+    {
+        _hierarchyContext = hierarchyContext;
+        _hierarchyContextMenu = _hierarchyContext.HierarchyContextMenuPresenter;
+        View = _hierarchyContext.HierarchyWindowView;
+        RegisterViewEvents();
     }
 
     public void UpdateListItemsSortByIndex()
@@ -126,15 +119,14 @@ public class HierarchyWindow : MonoBehaviour
         HoveredItem = item;
         HoveredItem.DefineItemPos();
 
-        if (IsSearching) return;
-        if ((hoverCoroutine != null) & (DraggedItem == null))
-        {
-            StopCoroutine(hoverCoroutine);
-            Debug.Log("+++++" + hoverCoroutine);
-        }
-
-        if (DraggedItem != null)
-            hoverCoroutine = StartCoroutine(HoverToExpand(item));
+        //   if (IsSearching) return;
+        //   if ((hoverCoroutine != null) & (DraggedItem == null))
+        //   {
+        //       StopCoroutine(hoverCoroutine);
+        //       Debug.Log("+++++" + hoverCoroutine);
+        //   }
+        //   if (DraggedItem != null)
+        //       hoverCoroutine = StartCoroutine(HoverToExpand(item));
     }
 
     private IEnumerator HoverToExpand(HierarchyItem item)
@@ -186,9 +178,9 @@ public class HierarchyWindow : MonoBehaviour
         if (HoveredItem == null) return;
         HoveredItem.View.SetActiveGuideline(false);
         _hoverTime = 0f;
-        if (hoverCoroutine != null) StopCoroutine(hoverCoroutine);
+        //    if (hoverCoroutine != null) StopCoroutine(hoverCoroutine);
 
-        HoveredItem = null;
+        //    HoveredItem = null;
     }
 
     public void OnWindowClick(PointerEventData eventData)

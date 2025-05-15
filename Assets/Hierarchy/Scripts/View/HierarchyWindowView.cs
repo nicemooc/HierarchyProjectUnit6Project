@@ -16,12 +16,16 @@ public class HierarchyWindowView : MonoBehaviour, IPointerClickHandler
 
     public List<HierarchyItem> Items = new();
 
+    // private HierarchyWindowPresenter _presenter;
+
+
     public Transform ItemContainer => _itemContainer;
     public string SearchText => _searchInputField.text;
 
 
     private void Awake()
     {
+        //   _presenter = new HierarchyWindowPresenter(this);
         foreach (var item in Items) RegisterItemEvents(item);
         _searchInputField.onValueChanged.AsObservable().Subscribe(OnSearchInputChanged);
         _clearSeachButton.onClick.AddListener(ClearSearchBar);
