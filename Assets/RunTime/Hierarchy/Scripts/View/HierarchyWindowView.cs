@@ -56,6 +56,7 @@ public class HierarchyWindowView : MonoBehaviour, IPointerClickHandler
     public void RegisterItemEvents(HierarchyItem item)
     {
         item.OnClicked += (data, hierarchyItem) => OnItemClicked?.Invoke(data, hierarchyItem);
+        item.OnClickDown += (data, hierarchyItem) => OnItemClickDown?.Invoke(data, hierarchyItem);
 
         item.OnFoldoutClick += (item, isCollapsed) => OnItemFoldoutClick?.Invoke(item, isCollapsed);
 

@@ -14,5 +14,5 @@ public class HierarchyKeyboardShortcutConfig : ScriptableObject
 
     public KeyCode _deleteObjectKey = KeyCode.Delete;
 
-    private KeyCode _navigationDownKey = KeyCode.DownArrow;
+    public KeyCode _navigationDownKey = KeyCode.DownArrow;
 }

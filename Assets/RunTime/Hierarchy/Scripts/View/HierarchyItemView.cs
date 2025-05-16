@@ -20,6 +20,8 @@ public class HierarchyItemView : MonoBehaviour
     [SerializeField] private GameObject _topGuideline;
     [SerializeField] private GameObject _bottomGuideline;
     [SerializeField] private GameObjectItemColorTheme _colorTheme;
+    [SerializeField] private CanvasGroup _activeViewCanvasGroup;
+
 
     [SerializeField] [ReadOnly] private int _depthLever;
     public bool DoesNeedTempDepth = true;
@@ -131,6 +133,11 @@ public class HierarchyItemView : MonoBehaviour
     {
         _layoutGroup.enabled = false;
         _layoutGroup.enabled = true;
+    }
+
+    public void SetActiveViewItem(bool isActive)
+    {
+        _activeViewCanvasGroup.alpha = isActive ? 1 : 0.5f;
     }
 
     public void SetFoldoutSprite(bool isOn)

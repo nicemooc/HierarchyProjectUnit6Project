@@ -11,6 +11,7 @@ public class HierarchyItem : MonoBehaviour
 
     [SerializeField] private List<HierarchyItem> _children = new();
     public bool IsRenaming;
+    public GameObjectReference ObjectRef;
     private float _gameObjectHeight, _topPos, _bottomPos;
     private ItemPosition _pos;
 
@@ -43,6 +44,7 @@ public class HierarchyItem : MonoBehaviour
         View.OnFoldoutClick += () => OnFoldoutClick?.Invoke(this, IsCollapsed);
         View.OnItemEnter += data => OnEnter(data, this);
         View.OnItemClicked += data => OnClicked(data, this);
+        View.OnItemClickDown += data => OnClickDown(data, this);
         View.OnItemBeginDrag += data => OnBeginDrag(data, this);
         View.OnItemDrop += data => OnDrop(data, this);
         View.OnItemDrag += data => OnDrag(data, this);
@@ -216,7 +218,7 @@ public class HierarchyItem : MonoBehaviour
                 break;
         }
 
-
+        dragItem.SetActiveView(dragItem.ObjectRef.GameObjectRef.activeInHierarchy);
         RefreshView();
     }
 
@@ -254,26 +256,39 @@ public class HierarchyItem : MonoBehaviour
             dragItem.SetSiblingIndex(transform.GetSiblingIndex() + 1);
     }
 
+    public void SetActiveView(bool isActive)
+    {
+        View.SetActiveViewItem(isActive);
+    }
+
     public void SetSiblingIndex(int index)
     {
         var addSiblingIndex = index - transform.GetSiblingIndex();
         transform.SetSiblingIndex(index);
+        ObjectRef.GameObjectRef.transform.SetSiblingIndex(ObjectRef.GameObjectRef.transform.GetSiblingIndex() +
+                                                          addSiblingIndex);
 
-
-        // var siblingIndex = Parent == null ? index : RteObjectRef.GameObjectRef.transform.GetSiblingIndex();
+        var siblingIndex = Parent == null ? index : ObjectRef.GameObjectRef.transform.GetSiblingIndex();
     }
 
     public void SetAsFirstSibling()
     {
         if (Parent == null)
+        {
             transform.SetSiblingIndex(0);
+            ObjectRef.GameObjectRef.transform.SetAsFirstSibling();
+        }
         else
+        {
             transform.SetSiblingIndex(1);
+            ObjectRef.GameObjectRef.transform.SetAsFirstSibling();
+        }
     }
 
     public void SetAsLastSibling()
     {
         transform.SetAsLastSibling();
+        ObjectRef.GameObjectRef.transform.SetAsLastSibling();
     }
 
     public void ChangeToNewParent(HierarchyItem newParent)
@@ -289,6 +304,7 @@ public class HierarchyItem : MonoBehaviour
 
         if (newParent == null)
         {
+            ObjectRef.GameObjectRef.transform.SetParent(null);
             gameObject.transform.SetParent(GetRootTransform());
             Parent = null;
 
@@ -298,6 +314,7 @@ public class HierarchyItem : MonoBehaviour
         }
         else
         {
+            ObjectRef.GameObjectRef.transform.SetParent(newParent.ObjectRef.GameObjectRef.transform);
             newParent.AddChild(this);
             SetAsLastSibling();
             RefreshChildDepth(this);
@@ -384,7 +401,7 @@ public class HierarchyItem : MonoBehaviour
         var currentTransform = this;
 
         while (currentTransform.Parent != null) currentTransform = currentTransform.Parent;
-        Debug.Log("+++++" + currentTransform.gameObject.name);
+        //  Debug.Log("+++++" + currentTransform.gameObject.name);
         return currentTransform.transform.parent;
     }
 

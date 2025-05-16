@@ -4,8 +4,6 @@ public class WindowManager : MonoBehaviour
 {
     [SerializeField] private HierarchyWindowView _hierarchyWindowView;
     [SerializeField] private KeyboardShortcut _keyboardShortcut;
-
-
     private HierarchyContext _hierarchyContext;
 
 
@@ -16,6 +14,8 @@ public class WindowManager : MonoBehaviour
 
     public HierarchyKeyboardShortcutPresenter HierarchyKeyboardShortcutPresenter =>
         _hierarchyContext.HierarchyKeyboardShortcutPresenter;
+
+    public HierarchyNavigation HierarchyNavigation => _hierarchyContext.HierarchyNavigation;
 
 
     private void Awake()
@@ -28,9 +28,11 @@ public class WindowManager : MonoBehaviour
         _hierarchyContext.HierarchyWindowPresenter = new HierarchyWindowPresenter();
         _hierarchyContext.HierarchyContextMenuPresenter = new HierarchyContextMenuPresenter();
         _hierarchyContext.HierarchyKeyboardShortcutPresenter = new HierarchyKeyboardShortcutPresenter();
+        _hierarchyContext.HierarchyNavigation = new HierarchyNavigation();
 
         HierarchyWindowPresenter.Init(_hierarchyContext);
         HierarchyContextMenuPresenter.Init(_hierarchyContext);
         HierarchyKeyboardShortcutPresenter.Init(_hierarchyContext);
+        HierarchyNavigation.Init(_hierarchyContext);
     }
 }
